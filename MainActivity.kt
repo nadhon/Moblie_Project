@@ -21,6 +21,23 @@ class MainAcitivity: AppcompatAtivity(){
         binding.tvIdade.text = "idade ${it.idade}"
       }
     }
+    lifecycleScope.lauch {
+      viewModel.uiStateUser.collectLatest{ stateUser -> 
+        whe(stateUser) {
+          is UIStateUser.Loading -> {
+            binding.tvNome.text = "carregando..."
+            binding.tvIdade.text = ""
+          }
+          is UIStateUser.Sucess ->{
+            binding.tvNome.text = 
+            getString(R.string.lbl_nome,stateUser.nome)
+            getString(R.string.lbl_idade,stateUser.idade)
+          }
+          is UIStateUser.Error -> {
+            binding.tvNome.text = "Erro ${stateUser.msg}"
+            binding.tvIdade.text = ""
+          }
+    }
     viewModel.carregarUsuario()
     
   }
